@@ -37,7 +37,8 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base, 'prod.sqlite')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+                              'sqlite:///' + os.path.join(base, 'data.sqlite')
     
     @classmethod
     def init_app(cls, app):
@@ -50,7 +51,7 @@ class ProductionConfig(Config):
         secure = None
         if getattr(cls, 'MAIL_USERNAME', None) is not None:
             credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
-            if getattr(cls, 'MAIL_SSL_TLS', None):
+            if getattr(cls, 'MAIL_USE_SSL', None):
                 secure = ()
         mail_handler = SMTPHandler(
             mailhost = (cls.MAIL_SERVER, cls.MAIL_PORT),
@@ -74,10 +75,6 @@ class HerokuConfig(ProductionConfig):
         file_handler = StreamHandler()
         file_handler.setLevel(logging.WARNING)
         app.logger.addHandler(file_handler)
-        
-        #处理代理服务器首部
-        from werkzeug.contrib.fixers import ProxyFix
-        app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
 config = {
