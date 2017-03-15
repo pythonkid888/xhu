@@ -24,8 +24,8 @@
         <p>{{user.about_me}}</p>
         {% endif %}
         <p>
-            Member Since {{ moment(user.member_since).format('L')}}.
-            Last Seen {{ moment(user.last_seen).fromNow()}}.
+            注册时间 {{ moment(user.member_since).format('L')}}.
+            在线时长 {{ moment(user.last_seen).fromNow()}}.
         </p>
         {% if user == current_user %}
         <a class="btn btn-default" href="{{ url_for('main.edit_profile')}}">
