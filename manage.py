@@ -19,7 +19,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-app = create_app('heroku')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 
