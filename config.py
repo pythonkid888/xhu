@@ -4,11 +4,12 @@ import os
 
 base = os.path.abspath(os.path.dirname(__file__))
 
+
 class Config:
     SECRET_KEY = 'i love you'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    FLASKY_MAIL_SUBJECT_PREFIX = '[Flasky]'
+    FLASKY_MAIL_SUBJECT_PREFIX = '[x乎]'
     FLASKY_MAIL_SENDER = 'DZ<496487991@qq.com>'
     FLASKY_ADMIN = '496487991@qq.com'
     FLASKY_PER_PAGE = 20
@@ -32,12 +33,13 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base, 'test.sqlite')
 
 class ProductionConfig(Config):
+    
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base, 'prod.sqlite')
     
     @classmethod
     def init_app(cls, app):
         Config.init_app(app)
-	    
+        
         #把错误发送到管理员邮箱
         import logging
         from logging.handlers import SMTPHandler

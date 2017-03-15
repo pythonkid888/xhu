@@ -339,6 +339,7 @@ class Comment(db.Model):
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
