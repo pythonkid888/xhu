@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Unconfirmed{% endblock %}
+
+{% block page_content %}
+<div class = 'page-header'>
+    <h1>hello, {{ current_user.username}}</h1>
+    <h3>you have not confirmed your account yet</h3>
+    <p>your account has not activate,please resend a confirmation email</p>
+    <a href="{{ url_for('auth.resend_confirmation')}}">resend email</a>
+</div>
+{% endblock %}
