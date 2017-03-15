@@ -1,7 +1,7 @@
-Welcome to Flasky!
+欢迎来到X乎!
 
-To confirm your account please click on the following link:
+为验证你的账户信息，请点击下面链接:
 
 {{ url_for('auth.confirm', token = token, _external = True)}}
 
-The Flasky Team
+X乎团队
