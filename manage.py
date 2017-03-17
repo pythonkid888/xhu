@@ -58,7 +58,7 @@ def test(coverage = False):
 def deploy():
     """Run deployment tasks"""
     from flask_migrate import upgrade
-    from app.models import Role, User
+    from app.models import Role, User, Category
     
     #把数据库迁移到最新修订版本
     upgrade()
@@ -66,7 +66,10 @@ def deploy():
     #创建用户角色
     Role.insert_roles()
     
-    #自关注
+    #创建Todolist类别
+    Category.insert_categorys()
+
+    # 自关注
     User.add_self_follows()
 
 

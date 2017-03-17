@@ -1,4 +1,4 @@
-
+#-*- coding-utf-8 -*-
 
 from . import db
 from . import login_manager
@@ -83,6 +83,7 @@ class User(UserMixin, db.Model):
                                 lazy = 'dynamic',
                                 cascade = 'all, delete-orphan')
     comments = db.relationship('Comment', backref = 'author', lazy = 'dynamic')
+    events = db.relationship('Event', backref = 'sponsor', lazy = 'dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -339,6 +340,31 @@ class Comment(db.Model):
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
+
+class Event(db.Model):
+    __tablename__ = 'events'
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(64))
+    category = db.Column(db.String(64))
+    completion = db.Column(db.Boolean)
+    create_time = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    sponsor_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
+class Category(db.Model):
+    __tablename__ = 'categorys'
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(64), unique = True)
+
+    @staticmethod
+    def insert_categorys():
+        categorys = ['study', 'entertainment', 'Game', 'rest']
+        for c in categorys:
+            category = Category.query.filter_by(name=c).first()
+            if not category:
+                category = Category(name=c)
+            db.session.add(category)
+        db.session.commit()
 
 @login_manager.user_loader
 def load_user(user_id):

@@ -34,12 +34,12 @@ class EditProfileAdminForm(FlaskForm):
     def validate_email(self, field):
         if field.data != self.user.email and \
                 User.query.filter_by(email = field.data).first():
-            raise ValidationError('Email already registered')
+            raise ValidationError('邮箱已注册')
 
     def validate_username(self, field):
         if field.data != self.user.username and \
                 User.query.filter_by(username = field.data).first():
-            raise ValidationError('Username already in use')
+            raise ValidationError('用户名已存在')
 
 class PostForm(FlaskForm):
     body = PageDownField("状态", validators= [DataRequired()])

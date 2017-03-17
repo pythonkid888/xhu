@@ -7,12 +7,14 @@ from wtforms import ValidationError
 from wtforms.validators import DataRequired, Email, Length, EqualTo, Regexp
 from ..models import User
 
+
 class LoginForm(FlaskForm):
 
     email = StringField('邮箱', validators = [DataRequired(), Length(1, 64), Email()])
     password = PasswordField('密码', validators = [DataRequired()])
     remember_me = BooleanField('保持登录')
     submit = SubmitField('登录')
+
 
 class RegisterForm(FlaskForm):
 
@@ -32,6 +34,7 @@ class RegisterForm(FlaskForm):
     def validate_username(self, field):
         if User.query.filter_by(username= field.data).first():
             raise ValidationError('用户名已占用')
+
 
 class ChangePasswordForm(FlaskForm):
     new_password = PasswordField('新密码', validators= [DataRequired()])

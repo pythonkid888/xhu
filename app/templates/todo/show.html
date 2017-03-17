@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}TodoList{% endblock %}
+
+
+{% block page_content %}
+<div class="container">
+    <h2>待办事项</h2>
+    {% if events %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>标题</th>
+                <th>类别</th>
+                <th>是否完成</th>
+                <th>创建时间</th>
+            </tr>
+        </thead>
+        {% for event in events %}
+        <tbody>
+            <tr class="{% if event.completion %}success{% else %}danger{% endif %}">
+                <td>{{ event.id }}</td>
+                <td>{{ event.title }}</td>
+                <td>{{ event.category }}</td>
+                <td>{% if event.completion %}
+                        <p>已完成</p>
+                    {% else %}
+                        <p>未完成</p>
+                    {% endif %}
+                </td>
+                <td>{{ event.create_time }}</td>
+                <td>{% if not event.completion %}
+                        <a href="{{ url_for('todo.finish', id = event.id)}}" class="btn btn-success" role="button">完成</a></td>
+                    {% endif %}
+                <td><div class="btn-group">
+                    <a href="{{ url_for('todo.edit_event', id = event.id)}}" class="btn btn-info" role="button">编辑</a>
+                    <a href="{{ url_for('todo.delete_event', id = event.id)}}" class="btn btn-danger" role="button">删除</a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+<div class="container">
+    <a href="{{ url_for('todo.add_event')}}" class="btn btn-info" role="button">添加事件</a>
+    <a href="{{ url_for('todo.add_category')}}" class="btn btn-info" role="button">添加类别</a>
+</div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %}添加类别{% endblock %}
+
+{% block page_content %}
+<div class="container">
+    <h2>添加类别</h2>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form)}}
+</div>
+{% endblock %}
