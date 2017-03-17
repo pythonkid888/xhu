@@ -58,7 +58,10 @@ def test(coverage = False):
 def deploy():
     """Run deployment tasks"""
     from flask_migrate import upgrade
-    from app.models import Role, User, Category
+    from app.models import Role, User, Category, Alembic
+    
+    #清楚Alembic version
+    Alembic.clear_A()
     
     #把数据库迁移到最新修订版本
     upgrade()
