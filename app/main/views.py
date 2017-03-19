@@ -1,4 +1,4 @@
-
+#-*- coding:utf-8 -*-
 
 from flask import render_template, redirect, url_for, abort, flash, request, current_app, make_response
 from . import main
@@ -7,6 +7,7 @@ from .. import db
 from ..models import User, Role, Permission, Post, Comment
 from flask_login import login_required, current_user
 from ..decorators import admin_required, permission_required
+import os
 
 
 @main.route('/', methods = ['GET', 'POST'])
@@ -70,8 +71,20 @@ def edit_profile():
         current_user.name = form.name.data
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
+        #新增用户头像, 截取表单中的avatar字段
+        avatar = request.files['avatar']
+        fname = avatar.filename
+        UPLOAD_FOLDER = os.getcwd() + '\\app\\static\\avatar\\'
+        ALLOWED_EXTENSIONS = ['png', 'gif', 'jpeg', 'jpg']
+        #split(分隔符, 切割次数)[片段]
+        flag = '.' in fname and fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+        if not flag:
+            flash('文件类型错误')
+            return redirect(url_for('main.user', username = current_user.username))
+        avatar.save('{}{}_{}'.format(UPLOAD_FOLDER, current_user.username, fname))
+        current_user.avatar = '/static/avatar/{}_{}'.format(current_user.username, fname)
         db.session.add(current_user)
-        flash('Your Profile has been updated')
+        flash('个人资料已更新')
         return redirect(url_for('main.user', username = current_user.username))
     form.name.data = current_user.name
     form.location.data = current_user.location
@@ -235,3 +248,5 @@ def moderate_disable(id):
     comment.disabled = True
     db.session.add(comment)
     return redirect(url_for('.moderate', page = request.args.get('page', 1, type = int)))
+
+

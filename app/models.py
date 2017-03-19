@@ -70,7 +70,7 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default = False)
-    avatar_hash = db.Column(db.String(32))
+    avatar = db.Column(db.String(128), default = None)
     posts = db.relationship('Post', backref = 'author', lazy = 'dynamic')
     followed = db.relationship('Follow',
                                foreign_keys = [Follow.follower_id],
@@ -92,8 +92,6 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions = 0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default = True).first()
-            if self.email is not None and self.avatar_hash is None:
-                self.avatar_hash = hashlib.md5(self.email.encode('utf-8')).hexdigest()
 
     def __repr__(self):
         return '<User %r>'% self.username
@@ -150,18 +148,6 @@ class User(UserMixin, db.Model):
     def ping(self):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
-
-    def gravatar(self, size = 100, default = 'identicon', rating = 'g'):
-        if request.is_secure:
-            url = 'https://secure.gravatar.com/avatar'
-        else:
-            url = 'http://www.gravatar.com/avatar'
-        hash = self.avatar_hash or hashlib.md5(self.email.encode('utf-8')).hexdigest()
-        return '{url}/{hash}?s={size}&d={default}%r={rating}'.format(url = url,
-                                                                     hash = hash,
-                                                                     size = size,
-                                                                     default = default,
-                                                                     rating = rating)
 
     @staticmethod
     def generate_fake(count = 100):
