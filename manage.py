@@ -70,7 +70,7 @@ def deploy():
     #创建Todolist类别
     Category.insert_categorys()
 
-    # 自关注
+    #自关注
     User.add_self_follows()
 
     
