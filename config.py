@@ -17,8 +17,7 @@ class Config:
     MAIL_PORT = 465
     MAIL_USE_SSL = True
     MAIL_USERNAME = 496487991
-    MAIL_PASSWORD = 'uxcafpfqjrldbhhi'
-
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     @staticmethod
     def init_app(app):
         pass
